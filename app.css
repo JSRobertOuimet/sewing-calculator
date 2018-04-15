@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .calculator {
@@ -46,9 +47,10 @@ input {
 }
 
 input:active {
-background-color: #AAA;
+  font-size: 1.8em;
+  background-color: #AAA;
 }
 
 #zero {
-width: 50%;
+  width: 50%;
 }
