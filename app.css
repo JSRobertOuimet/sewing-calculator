@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+}
+
+#display {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 0 15px 5px;
+  height: calc(30vh - 5px);
+  background-color: #222;
+  font-family: Helvetica, sans-serif;
+  font-size: 3em;
+  font-weight: 100;
+  color: white;
+}
+
+#inputs {
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+}
+
+.row {
+  display: flex;
+  height: 20%;
+}
+
+input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  outline: 1px solid #333;
+  border: none;
+  font-size: 2em;
+  font-weight: lighter;
+  background-color: #EEE;
+  cursor: pointer;
+}
+
+input:active {
+background-color: #AAA;
+}
+
+#zero {
+width: 50%;
+}
