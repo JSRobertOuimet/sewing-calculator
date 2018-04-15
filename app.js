@@ -1,7 +1,7 @@
 (glob => {
 
   const Data = (() => {
-    
+
     let instance;
     let digits = [];
 
@@ -62,7 +62,7 @@
           ui.displayNumber(parsedNumbers);
         }
         else {
-          console.log('Operation or dot.');
+          console.log('Operation.');
         }
       }
 
