@@ -1,11 +1,9 @@
 (glob => {
 
   const Data = (() => {
+    let instance,
+        digits = [];
 
-    let instance;
-    let digits = [];
-
-    
     return () => {
       if(!instance) {
         instance = {
@@ -33,22 +31,21 @@
 
   })();
 
-  const Operations = (() => {
-
+  const Events = (() => {
     let instance;
 
     return () => {
       if(!instance) {
         instance = {
-          action
+          dispatch
         };
       }
 
-      function action() {
+      function dispatch() {
         const data = Data(),
-              ui = UI();
-
-        const inputVal = this.value,
+              ui = UI(),
+              
+              inputVal = this.value,
               re = /\d|\./g,
               result = re.test(inputVal);
     
@@ -71,8 +68,56 @@
 
   })();
 
-  const UI = (() => {
+  const Operators = (() => {
+    let instance;
 
+    return () => {
+      if(!instance) {
+        instance = {
+          add,
+          substract,
+          multiple,
+          divide,
+          plusMinus,
+          percentage,
+          allClear
+        };
+      }
+
+      function add() {
+        console.log('Add.');
+      }
+
+      function substract() {
+        console.log('Substract.');
+      }
+
+      function multiple() {
+        console.log('Multiple.');
+      }
+
+      function divide() {
+        console.log('Divide.');
+      }
+
+      function plusMinus() {
+        console.log('Plus/minus.');
+      }
+
+      function percentage() {
+        console.log('Percentage.');
+      }
+
+      function allClear() {
+        console.log('AC.');
+      }
+
+      return instance;
+    };
+
+  })();
+
+  const UI = (() => {
     let instance;
 
     return () => {
@@ -92,15 +137,14 @@
 
   })();
 
-  const App = ((Operation) => {
-
-    const op = Operations(),
+  const App = ((Events) => {
+    const ev = Events(),
           inputs = document.querySelectorAll('input');
 
     inputs.forEach(input => {
-      input.addEventListener('click', op.action);
+      input.addEventListener('click', ev.dispatch);
     });
 
-  })(Operations);
+  })(Events);
 
 })(this);
