@@ -2,28 +2,26 @@
 
   const Data = (() => {
     let instance,
-        digits = [];
+        digits = [0];
 
     return () => {
       if(!instance) {
         instance = {
-          storeNumbers,
-          joinNumbers
+          digits,
+          storeNumbers
         };
       }
-      
+
       function storeNumbers(inputVal) {
-        digits.push(inputVal);
+        if(inputVal === '0') {
+          digits.shift();
+          digits.push(inputVal);
+        }
+        else {
+          digits.push(inputVal);
+        }
 
         return digits;
-      }
-      
-      function joinNumbers(digits) {
-        let joinedDigits;
-        
-        joinedDigits = digits.join('');
-
-        return joinedDigits;
       }
 
       return instance;
@@ -42,24 +40,50 @@
       }
 
       function dispatch() {
-        const data = Data(),
+        const da = Data(),
+              op = Operators(),
               ui = UI(),
-              
+
               inputVal = this.value,
               re = /\d|\./g,
               result = re.test(inputVal);
-    
+
         if(result) {
           let digits,
-              parsedNumbers;
+              parsedNumber;
 
-          digits = data.storeNumbers(inputVal);
-          parsedNumbers = parseFloat(data.joinNumbers(digits), 10);
-          
-          ui.displayNumber(parsedNumbers);
+          digits = da.storeNumbers(inputVal);
+          parsedNumber = parseFloat(digits.join(''), 10);
+
+          ui.displayNumber(parsedNumber);
         }
         else {
-          console.log('Operation.');
+          switch(inputVal) {
+            case 'AC':
+              op.allClear();
+              break;
+            case '±':
+              op.plusMinus();
+              break;
+            case '%':
+              op.percentage();
+              break;
+            case '+':
+              op.add();
+              break;
+            case '−':
+              op.substract();
+              break;
+            case '×':
+              op.multiple();
+              break;
+            case '÷':
+              op.divide();
+              break;
+            case '=':
+              op.sum();
+              break;
+          }
         }
       }
 
@@ -74,42 +98,47 @@
     return () => {
       if(!instance) {
         instance = {
+          plusMinus,
+          percentage,
+          allClear,
           add,
           substract,
           multiple,
           divide,
-          plusMinus,
-          percentage,
-          allClear
+          sum
         };
       }
 
-      function add() {
-        console.log('Add.');
-      }
-
-      function substract() {
-        console.log('Substract.');
-      }
-
-      function multiple() {
-        console.log('Multiple.');
-      }
-
-      function divide() {
-        console.log('Divide.');
+      function allClear() {
+        console.log('AC');
       }
 
       function plusMinus() {
-        console.log('Plus/minus.');
+        console.log('Plus/minus');
       }
 
       function percentage() {
-        console.log('Percentage.');
+        console.log('Percentage');
       }
 
-      function allClear() {
-        console.log('AC.');
+      function add() {
+        console.log('Add');
+      }
+
+      function substract() {
+        console.log('Substract');
+      }
+
+      function multiple() {
+        console.log('Multiple');
+      }
+
+      function divide() {
+        console.log('Divide');
+      }
+
+      function sum() {
+        console.log('Sum');
       }
 
       return instance;
@@ -127,9 +156,11 @@
         };
       }
 
-      function displayNumber(inputVal) {
+      function displayNumber(parsedNumber) {
+        const da = Data();
         const display = document.querySelector('#display');
-        display.innerHTML = inputVal;
+
+        display.innerHTML = parsedNumber;
       }
 
       return instance;
@@ -137,14 +168,18 @@
 
   })();
 
-  const App = ((Events) => {
-    const ev = Events(),
+  const App = (() => {
+    const da = Data(),
+          ev = Events(),
+          ui = UI(),
           inputs = document.querySelectorAll('input');
+
+    ui.displayNumber(da.digits);
 
     inputs.forEach(input => {
       input.addEventListener('click', ev.dispatch);
     });
 
-  })(Events);
+  })();
 
 })(this);
