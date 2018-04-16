@@ -3,13 +3,13 @@
   const Data = (() => {
     let instance,
         digits = [],
-        number;
+        parsedNumber;
 
     return () => {
       if(!instance) {
         instance = {
           digits,
-          number,
+          parsedNumber,
           storeNumbers
         };
       }
@@ -36,19 +36,17 @@
       }
 
       function dispatch() {
-        const da = Data(), op = Operators(), ui = UI(),
+        const da = Data(),
+              op = Operators(),
+              ui = UI(),
               inputVal = this.value,
               re = /\d|\./g,
               result = re.test(inputVal);
 
         if(result) {
-          let digits,
-              parsedNumber;
-
-          digits = da.storeNumbers(inputVal);
-          da.number = parseFloat(digits.join(''), 10);
-
-          ui.displayNumber(da.number);
+          da.digits = da.storeNumbers(inputVal);
+          da.parsedNumber = parseFloat(da.digits.join(''), 10);          
+          ui.displayNumber(da.parsedNumber);
         }
         else {
           switch(inputVal) {
@@ -56,10 +54,10 @@
               op.allClear();
               break;
             case '±':
-              op.plusMinus(da.number);
+              op.plusMinus(da.parsedNumber);
               break;
             case '%':
-              op.percentage(da.number);
+              op.percentage(da.parsedNumber);
               break;
             case '+':
               op.add();
@@ -103,25 +101,33 @@
       }
 
       function allClear() {
-        console.log('AC');
+        const da = Data(),
+              ui = UI();
+
+        da.digits.splice(0, da.digits.length);
+        da.parsedNumber = undefined;
+        ui.displayNumber('0');      
       }
 
       function plusMinus(input) {
-        const da = Data(), ui = UI();
-        let output;
+        const da = Data(),
+              ui = UI();
+        let   output;
 
         output = input * -1;
 
-        da.number = output;
+        da.parsedNumber = output;
         ui.displayNumber(output);
       }
 
       function percentage(input) {
-        const da = Data(), ui = UI();
-        let output;
+        const da = Data(),
+              ui = UI();
+        let   output;
 
         output = input / 100;
-        da.number = output;
+
+        da.parsedNumber = output;
         ui.displayNumber(output);
       }
 
@@ -142,7 +148,9 @@
       }
 
       function sum() {
-        console.log('Sum');
+        const da = Data();
+
+        console.log(da.digits, da.parsedNumber);
       }
 
       return instance;
@@ -156,12 +164,22 @@
     return () => {
       if(!instance) {
         instance = {
+          getEls,
           displayNumber
         };
       }
 
+      function getEls(el, all) {
+        if(all) {
+          return document.querySelectorAll(el);
+        }
+        else {
+          return document.querySelector(el);
+        }
+      }
+
       function displayNumber(parsedNumber) {
-        const display = document.querySelector('#display');
+        const display = getEls('#display', false);
 
         display.innerHTML = parsedNumber;
       }
@@ -172,8 +190,10 @@
   })();
 
   const App = (() => {
-    const da = Data(), ev = Events(), ui = UI(),
-          inputs = document.querySelectorAll('input');
+    const da = Data(),
+          ev = Events(),
+          ui = UI(),
+          inputs = ui.getEls('input', true);
 
     ui.displayNumber('0');
 
