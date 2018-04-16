@@ -2,26 +2,20 @@
 
   const Data = (() => {
     let instance,
-        digits = ['0'];
+        digits = [],
+        number;
 
     return () => {
       if(!instance) {
         instance = {
           digits,
+          number,
           storeNumbers
         };
       }
 
       function storeNumbers(inputVal) {
-        console.log(digits);
-
-        if(inputVal === '0' && digits.length === 1) {
-          digits.shift();
-          digits.push(inputVal);
-        }
-        else {
-          digits.push(inputVal);
-        }
+        digits.push(inputVal);
 
         return digits;
       }
@@ -42,10 +36,7 @@
       }
 
       function dispatch() {
-        const da = Data(),
-              op = Operators(),
-              ui = UI(),
-
+        const da = Data(), op = Operators(), ui = UI(),
               inputVal = this.value,
               re = /\d|\./g,
               result = re.test(inputVal);
@@ -55,9 +46,9 @@
               parsedNumber;
 
           digits = da.storeNumbers(inputVal);
-          parsedNumber = parseFloat(digits.join(''), 10);
+          da.number = parseFloat(digits.join(''), 10);
 
-          ui.displayNumber(parsedNumber);
+          ui.displayNumber(da.number);
         }
         else {
           switch(inputVal) {
@@ -65,10 +56,10 @@
               op.allClear();
               break;
             case '±':
-              op.plusMinus();
+              op.plusMinus(da.number);
               break;
             case '%':
-              op.percentage();
+              op.percentage(da.number);
               break;
             case '+':
               op.add();
@@ -100,9 +91,9 @@
     return () => {
       if(!instance) {
         instance = {
+          allClear,
           plusMinus,
           percentage,
-          allClear,
           add,
           substract,
           multiple,
@@ -115,12 +106,23 @@
         console.log('AC');
       }
 
-      function plusMinus() {
-        console.log('Plus/minus');
+      function plusMinus(input) {
+        const da = Data(), ui = UI();
+        let output;
+
+        output = input * -1;
+
+        da.number = output;
+        ui.displayNumber(output);
       }
 
-      function percentage() {
-        console.log('Percentage');
+      function percentage(input) {
+        const da = Data(), ui = UI();
+        let output;
+
+        output = input / 100;
+        da.number = output;
+        ui.displayNumber(output);
       }
 
       function add() {
@@ -170,12 +172,10 @@
   })();
 
   const App = (() => {
-    const da = Data(),
-          ev = Events(),
-          ui = UI(),
+    const da = Data(), ev = Events(), ui = UI(),
           inputs = document.querySelectorAll('input');
 
-    ui.displayNumber(da.digits);
+    ui.displayNumber('0');
 
     inputs.forEach(input => {
       input.addEventListener('click', ev.dispatch);
