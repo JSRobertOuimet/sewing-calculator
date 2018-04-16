@@ -2,7 +2,7 @@
 
   const Data = (() => {
     let instance,
-        digits = [0];
+        digits = ['0'];
 
     return () => {
       if(!instance) {
@@ -13,7 +13,9 @@
       }
 
       function storeNumbers(inputVal) {
-        if(inputVal === '0') {
+        console.log(digits);
+
+        if(inputVal === '0' && digits.length === 1) {
           digits.shift();
           digits.push(inputVal);
         }
@@ -157,7 +159,6 @@
       }
 
       function displayNumber(parsedNumber) {
-        const da = Data();
         const display = document.querySelector('#display');
 
         display.innerHTML = parsedNumber;
