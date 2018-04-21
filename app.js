@@ -137,9 +137,7 @@
       }
 
       function add(input) {
-        const da = Data(),
-              ev = Events();
-        let   output;
+        const da = Data();
 
         da.parsedNumbers.push(input);
 
@@ -205,8 +203,7 @@
   })();
 
   const App = (() => {
-    const da = Data(),
-          ev = Events(),
+    const ev = Events(),
           ui = UI(),
           inputs = ui.getEls("input", true);
 
