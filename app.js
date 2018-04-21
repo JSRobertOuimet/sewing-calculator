@@ -1,9 +1,10 @@
 (glob => {
   const Data = (() => {
-    let instance,
-        digits = [],
-        parsedNumbers = [],
-        parsedNumber;
+    let
+      instance,
+      digits = [],
+      parsedNumbers = [],
+      parsedNumber;
 
     return () => {
       if (!instance) {
@@ -36,16 +37,11 @@
       }
 
       function dispatch() {
-        const da = Data(),
-              op = Operators(),
-              ui = UI(),
-              inputVal = this.value,
-              re = /\d|\./g,
-              result = re.test(inputVal);
-
-        // if(ui.els['#display'].innerHTML !== '0') {
-        //   console.log("Not the first digit entered.");
-        // }
+        const
+          da = Data(), op = Operators(), ui = UI(),
+          inputVal = this.value,
+          re = /\d|\./g,
+          result = re.test(inputVal);
 
         // Numbers
         if(result) {
@@ -56,30 +52,30 @@
         // Operations
         else {
           switch (inputVal) {
-            case "AC":
-              op.allClear();
-              break;
-            case "±":
-              op.plusMinus(da.parsedNumber);
-              break;
-            case "%":
-              op.percentage(da.parsedNumber);
-              break;
-            case "+":
-              op.add(da.parsedNumber);
-              break;
-            case "−":
-              op.substract();
-              break;
-            case "×":
-              op.multiple();
-              break;
-            case "÷":
-              op.divide();
-              break;
-            case "=":
-              op.sum();
-              break;
+          case "AC":
+            op.allClear();
+            break;
+          case "±":
+            op.plusMinus(da.parsedNumber);
+            break;
+          case "%":
+            op.percentage(da.parsedNumber);
+            break;
+          case "+":
+            op.add(da.parsedNumber);
+            break;
+          case "−":
+            op.substract();
+            break;
+          case "×":
+            op.multiple();
+            break;
+          case "÷":
+            op.divide();
+            break;
+          case "=":
+            op.sum();
+            break;
           }
         }
       }
@@ -106,8 +102,7 @@
       }
 
       function allClear() {
-        const da = Data(),
-              ui = UI();
+        const da = Data(), ui = UI();
 
         da.digits.splice(0, da.digits.length);
         da.parsedNumber = undefined;
@@ -115,8 +110,7 @@
       }
 
       function plusMinus(input) {
-        const da = Data(),
-              ui = UI();
+        const da = Data(), ui = UI();
         let output;
 
         output = input * -1;
@@ -126,8 +120,7 @@
       }
 
       function percentage(input) {
-        const da = Data(),
-              ui = UI();
+        const da = Data(), ui = UI();
         let output;
 
         output = input / 100;
@@ -140,26 +133,29 @@
         const da = Data();
 
         da.parsedNumbers.push(input);
-
-        console.log(da.parsedNumbers);
+        da.digits.length = 0;
       }
 
-      function substract() {
-        console.log("Substract");
-      }
+      function substract() {}
 
-      function multiple() {
-        console.log("Multiple");
-      }
+      function multiple() {}
 
-      function divide() {
-        console.log("Divide");
-      }
+      function divide() {}
 
       function sum() {
-        const da = Data();
+        const da = Data(), ui = UI();
+        let   output;
 
-        console.log(da.digits, da.parsedNumber);
+        // Adding two numbers
+        if(da.parsedNumbers.length === 1) {
+          output = da.parsedNumbers[0] + da.parsedNumber;
+        }
+        // Adding more than two numbers
+        else {
+          output = da.parsedNumbers.reduce((acc, cur) => acc + cur);
+        }
+
+        ui.displayNumber(output);
       }
 
       return instance;
@@ -167,8 +163,7 @@
   })();
 
   const UI = (() => {
-    let instance,
-        els = {};
+    let instance, els = {};
 
     return () => {
       if (!instance) {
@@ -203,11 +198,11 @@
   })();
 
   const App = (() => {
-    const ev = Events(),
-          ui = UI(),
-          inputs = ui.getEls("input", true);
+    const
+      ev = Events(), ui = UI(),
+      inputs = ui.getEls("input", true);
 
-    ui.displayNumber("0");
+    ui.displayNumber(0);
 
     inputs.forEach(input => {
       input.addEventListener("click", ev.dispatch);
